@@ -1,0 +1,6 @@
+flask
+flask-sqlalchemy
+flask-cors
+pymysql
+python-dotenv
+matlabengine==24.1.2  # 必须与你的 MATLAB 版本匹配
