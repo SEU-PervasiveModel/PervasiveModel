@@ -93,21 +93,26 @@ REQUIRED_PARAMS = {
     'move_time': {'type': 'double'},
     'move_speed': {'type': 'double'},
     'move_accel': {'type': 'double'},
-    'voltage': {'type': 'double'},
-    'current': {'type': 'double'},
-    'rpm': {'type': 'double'},
+    'samp_rate': {'type': 'double'},
+    'name': {'type': 'string'},
     
     # 三维向量（数组类型）
-    'vector3d': {
+    'ini_pos': {
         'type': 'array',
         'length': 3,
         'element_type': 'double'
     },
     
+    'move_dir': {
+        'type': 'array',
+        'length': 3,
+        'element_type': 'double'
+    },
+
     # 枚举选择参数
     'track_type': {
         'type': 'enum',
-        'options': ['normal', 'eco', 'turbo']
+        'options': ['static', 'linear', 'circle', 'random','random_circle']
     }
 }
 
