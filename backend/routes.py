@@ -90,10 +90,8 @@ def login():
 
 REQUIRED_PARAMS = {
     # 基础数值参数
-    'move_time': {'type': 'double'},
     'move_speed': {'type': 'double'},
     'move_accel': {'type': 'double'},
-    'samp_rate': {'type': 'double'},
     'name': {'type': 'string'},
     
     # 三维向量（数组类型）
