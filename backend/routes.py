@@ -12,6 +12,20 @@ from werkzeug.exceptions import BadRequest
 
 api = Blueprint('api', __name__)
 
+@api.route('/', methods=['GET'])
+def api_root():
+    return jsonify({
+        "status": "online",
+        "api_version": "1.0",
+        "endpoints": [
+            "/api/matlab-compute",
+            "/api/register",
+            "/api/login",
+            "/api/track",
+            "/api/antenna"
+        ]
+    })
+
 @api.route('/matlab-compute', methods=['POST'])
 def matlab_compute():
     try:
