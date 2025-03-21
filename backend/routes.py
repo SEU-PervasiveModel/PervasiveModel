@@ -1,11 +1,8 @@
 from flask import Blueprint, request, jsonify
 from backend.models import User
 from backend.extensions import db
-from backend.matlab.engine import matlab_engine  # 新增
-import matlab
-
-from flask import Blueprint, request, jsonify
 from backend.matlab.engine import matlab_engine
+from backend.matlab.functions import init_channel_model, configure_antenna, create_track
 import matlab
 import traceback
 from werkzeug.exceptions import BadRequest
