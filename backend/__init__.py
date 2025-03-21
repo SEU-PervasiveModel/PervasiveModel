@@ -7,6 +7,11 @@ import logging
 def create_app(config_class=Config):
     app = Flask(__name__)
     app.config.from_object(config_class)
+
+    @app.before_request
+    def ensure_matlab_initialized():
+        MatlabEngine.initialize(app.root_path)
+
     
     # 配置日志
     logging.basicConfig(level=logging.DEBUG)
@@ -19,21 +24,9 @@ def create_app(config_class=Config):
     with app.app_context():
         try:
             matlab_engine.initialize(app.root_path)
-            app.logger.info("MATLAB引擎初始化成功")
         except Exception as e:
-            app.logger.error(f"MATLAB引擎初始化失败: {str(e)}")
+            app.logger.error(f"应用启动失败: {str(e)}")
             # 生产环境应在此处处理失败情况
-    
-    # 在请求前检查MATLAB引擎状态
-    @app.before_request
-    def check_matlab_engine():
-        if not matlab_engine.is_initialized():
-            try:
-                matlab_engine.initialize(app.root_path)
-                app.logger.info("请求前重新初始化MATLAB引擎成功")
-            except Exception as e:
-                app.logger.error(f"请求前重新初始化MATLAB引擎失败: {str(e)}")
-                # 可以在这里决定如何处理失败情况
     
     # 注册蓝图
     from backend.routes import api
