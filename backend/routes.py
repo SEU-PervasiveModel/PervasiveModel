@@ -12,6 +12,20 @@ from werkzeug.exceptions import BadRequest
 
 api = Blueprint('api', __name__)
 
+@api.route('/', methods=['GET'])
+def api_root():
+    return jsonify({
+        "status": "online",
+        "api_version": "1.0",
+        "endpoints": [
+            "/api/matlab-compute",
+            "/api/register",
+            "/api/login",
+            "/api/track",
+            "/api/antenna"
+        ]
+    })
+
 @api.route('/matlab-compute', methods=['POST'])
 def matlab_compute():
     try:
@@ -114,7 +128,7 @@ REQUIRED_PARAMS = {
     }
 }
 
-@api.route('/device-data', methods=['POST'])
+@api.route('/track', methods=['POST'])
 def handle_device_data():
     try:
         data = request.get_json()
@@ -188,21 +202,22 @@ def handle_device_data():
             }), 400
 
         # 示例业务处理（可替换实际逻辑）
-        processed['vector_magnitude'] = sum(x**2 for x in processed['vector3d'])**0.5
+        processed['vector_magnitude'] = sum(x**2 for x in processed['ini_pos'])**0.5
         
         return jsonify({
             "status": "success",
             "received": processed,
             "validation": {
                 "parameter_count": len(processed),
-                "vector_dimensions": len(processed['vector3d'])
+                "vector_dimensions": len(processed['ini_pos'])
             }
         }), 200
 
     except BadRequest as e:
         return jsonify({"status": "error", "message": str(e)}), 400
     except Exception as e:
-        api.logger.error(f"Server error: {str(e)}")
+        from flask import current_app
+        current_app.logger.error(f"Server error: {str(e)}")
         return jsonify({"status": "error", "message": "Internal server error"}), 500
     
 @api.route('/antenna', methods=['POST'])
